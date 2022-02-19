@@ -1,0 +1,23 @@
+@use '../../styles/colours' as c;
+
+$cell-size: 80px;
+
+.board {
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid black;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.cell {
+    display: block;
+    width: $cell-size;
+    height: $cell-size;
+    background-color: c.$cell-even-colour;
+}
+
+.cellOdd { background-color: c.$cell-odd-colour; }
