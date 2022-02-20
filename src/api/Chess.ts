@@ -12,18 +12,22 @@ export interface Coordinate {
   col: number;
 };
 
+type MoveGenerator = (board: Board, coord: Coordinate) => Coordinate[];
+
+const moveGenerators: Record<PieceType, MoveGenerator> = {
+    'pawn': getPawnMoves,
+    'bishop': getBishopMoves,
+    'knight': getKnightMoves,
+    'rook': getRookMoves,
+    'queen': getQueenMoves,
+    'king': getKingMoves
+} 
+
 export function getValidMoves(board: Board, coord: Coordinate): Coordinate[] {
     const currentPiece = board[coord.row][coord.col];
     if (currentPiece === null) return [];
 
-    if(currentPiece.type === 'pawn') return getPawnMoves(board, coord);
-    else if(currentPiece.type === 'bishop') return getBishopMoves(board, coord);
-    else if(currentPiece.type === 'knight') return getKnightMoves(board, coord);
-    else if(currentPiece.type === 'rook') return getRookMoves(board, coord);
-    else if(currentPiece.type === 'queen') return getQueenMoves(board, coord);
-    else if(currentPiece.type === 'king') return getKingMoves(board, coord);
-
-    else throw new Error("Unknown piece type");
+    return moveGenerators[currentPiece.type](board, coord);
 }
 
 function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
