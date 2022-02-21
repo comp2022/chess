@@ -35,7 +35,43 @@ export function coordOOB(coord: Coordinate): boolean {
 }
 
 function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
+    const currentPiece = board[coord.row][coord.col];
+    let currentColor = currentPiece?.isBlack; // true = black, false = white
     let moves: Coordinate[] = [];
+    let row: number = 0;
+    let colLeft = coord.col - 1;
+    let colRight = coord.col + 1;
+
+    // check moves for Black piece
+    if (currentPiece?.isBlack) {
+        // first pawn move 
+        if (coord.row === 1) {
+            if (board[coord.row + 2][coord.col] === null) moves.push({row: coord.row + 2, col: coord.col}) 
+        }
+        row = coord.row + 1;
+    }
+    // white
+    if (!currentPiece?.isBlack) {
+        // first pawn move 
+        if (coord.row === 6) {
+            if (board[coord.row - 2][coord.col] === null) moves.push({row: coord.row - 2, col: coord.col}) 
+        }
+        row = coord.row - 1;
+    }
+        // check for row out of bound
+    if (row >= 0 && row <= 7) {
+        // move 1 step forward if its empty square
+        if (board[row][coord.col] === null) moves.push({row: row, col: coord.col});
+
+        // move to take out enemy pawn
+        if (colLeft >= 0 && board[row][colLeft] !== null &&  currentColor !== board[row][colLeft]?.isBlack) moves.push({row: row, col: colLeft})
+
+        // move to take out enemy pawn
+        if (colRight <= 7 && board[row][colRight] !== null && currentColor !== board[row][colRight]?.isBlack) moves.push({row: row, col: colRight})
+    }
+    
+ 
+    
     return moves;
 }
 
