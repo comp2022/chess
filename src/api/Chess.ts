@@ -43,18 +43,18 @@ function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
     let colRight = coord.col + 1;
 
     // check moves for Black piece
-    if (currentPiece?.isBlack) {
+    if (!currentPiece?.isBlack) {
         // first pawn move 
         if (coord.row === 1) {
-            if (board[coord.row + 2][coord.col] === null) moves.push({row: coord.row + 2, col: coord.col}) 
+            if (board[coord.row + 1][coord.col] === null && board[coord.row + 2][coord.col] === null) moves.push({row: coord.row + 2, col: coord.col}) 
         }
         row = coord.row + 1;
     }
-    // white
-    if (!currentPiece?.isBlack) {
+    // black
+    if (currentPiece?.isBlack) {
         // first pawn move 
         if (coord.row === 6) {
-            if (board[coord.row - 2][coord.col] === null) moves.push({row: coord.row - 2, col: coord.col}) 
+            if (board[coord.row - 1][coord.col] === null && board[coord.row - 2][coord.col] === null) moves.push({row: coord.row - 2, col: coord.col}) 
         }
         row = coord.row - 1;
     }
