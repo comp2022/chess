@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.scss';
-import { Board } from './components/board/Board';
+import { BoardComponent } from './components/board/BoardComponent';
+import state from './api/boardstates/default.json';
+import { Board, convertRawToBoard } from './api/Chess';
 
 function App() {
+  const initialBoard: Board = convertRawToBoard(state);
 
   return <div id="app">
-    <Board />
+    <BoardComponent board={initialBoard}/>
   </div>;
 }
 

@@ -5,8 +5,7 @@ $cell-size: 80px;
 .board {
     display: flex;
     flex-direction: column;
-
-    border: 1px solid black;
+    // border: 1px solid black;
 }
 
 .row {
@@ -15,9 +14,25 @@ $cell-size: 80px;
 }
 .cell {
     display: block;
+    position: relative;
     width: $cell-size;
     height: $cell-size;
     background-color: c.$cell-even-colour;
 }
 
-.cellOdd { background-color: c.$cell-odd-colour; }
+.cellOdd { 
+    background-color: c.$cell-odd-colour; 
+}
+
+.cellTag {
+    margin: auto 10px;
+}
+
+.img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 70%;
+    height: 70%;
+}
