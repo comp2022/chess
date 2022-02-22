@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Board, getValidMoves } from "../../api/Chess";
+import React, { useEffect, useState } from "react";
+import { Board, Coordinate, getValidMoves } from "../../api/Chess";
 import styles from './Board.module.scss';
 import { Cell } from "./Cell";
 
@@ -23,21 +23,32 @@ export interface BoardProps {
  * The chess board. Has no control over the game itself, just current board state.
  */
 // FC stands for Functional Component. This function returns a Functional Components with the props of BoardProps
-export const BoardComponent: React.FC<BoardProps> = (board) => {    
-    const [ currentBoard, setCurrentBoard ] = useState(board);
+export const BoardComponent: React.FC<BoardProps> = ({ board }) => {    
+    const [ currentBoard, setCurrentBoard ] = useState<Board>(board);
+    const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
+
+    useEffect(() => console.log(possibleMoves), [possibleMoves]);
 
     return <div className={styles.board}>
    
-        { currentBoard && currentBoard.board.map((row, rowIndex) => 
-                <div className={styles.row} key={rowIndex}>
-                    {/* adding temporarily for testing */}
-                    <span className={styles.cellTag}>{rowIndex}</span>
-                    {row.map((piece, colIndex) => <Cell
+        { currentBoard && currentBoard.map((row, rowIndex) => 
+            <div className={styles.row} key={rowIndex}>
+                {/* adding temporarily for testing */}
+                <span className={styles.cellTag}>{rowIndex}</span>
+                { row.map((piece, colIndex) => {
+                    const highlighted = possibleMoves.some(({row: pRow, col: pCol}) => pRow === rowIndex && pCol === colIndex);
+                    return <Cell
                         isBlack={(rowIndex + colIndex) % 2 === 1}
+                        highlighted={highlighted}
                         key={`${rowIndex} ${colIndex}`}
-                        piece={piece} />
-                    )}
-                </div>
+                        piece={piece} 
+                        onClick={() => {
+                            setPossibleMoves(getValidMoves(currentBoard, { row: rowIndex, col: colIndex }));
+                            console.log(rowIndex, colIndex)
+                        }}
+                    />;
+                })}
+            </div>
         )}
     </div>;
 }
