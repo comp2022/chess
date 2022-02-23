@@ -6,19 +6,22 @@ const classNames = require('classnames'); // https://github.com/JedWatson/classn
 
 export interface CellProps {
     isBlack: boolean;
+    highlighted: boolean;
     piece: Piece | null;
+    onClick: () => void;
 }
 
-export const Cell: React.FC<CellProps> = ({isBlack, piece }) => {
+export const Cell: React.FC<CellProps> = ({ isBlack, piece, onClick, highlighted }) => {
     let cn = classNames(
         [ styles.cell ], 
-        { [ styles.cellOdd ]: isBlack } // determines shade of cell
+        { [ styles.cellOdd ]: isBlack }, // determines shade of cell
+        { [styles.highlighted]: highlighted }
     );
 
     const type: Piece | null = piece;
     
     return (
-        <div className={cn}>
+        <div className={cn} onClick={() => onClick()}>
             {
                 type && <img src={chesspieces[type.type][+type.isBlack]} className={styles.img} alt={type.type} />
             }
