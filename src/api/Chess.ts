@@ -69,14 +69,43 @@ function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
         // move to take out enemy pawn
         if (colRight <= 7 && board[row][colRight] !== null && currentColor !== board[row][colRight]?.isBlack) moves.push({row: row, col: colRight})
     }
-    
- 
-    
+    return moves;
+}
+
+
+function oneDirectionBishop(board: Board, coord: Coordinate, x:number, y: number): Coordinate[] {
+    let moves: Coordinate[] = [];
+    for (let i = 1; i < 8; i++) {
+        let currentCoord: Coordinate = {row: coord.row + (i * x), col: coord.col + (i * y)};
+
+        if (coordOOB(currentCoord)) {
+            return moves;
+        }
+
+        // empty cell
+        if (board[currentCoord.row][currentCoord.col] === null) {
+            moves.push(currentCoord);
+        }
+        // if cell does not have the same color, push the move once and return the moves
+        else if (board[currentCoord.row][currentCoord.col]?.isBlack !== board[coord.row][coord.col]?.isBlack) {
+            moves.push(currentCoord);
+            return moves;
+        }
+
+        // blocked by same color piece
+        else {
+            return moves;
+        }
+       
+    }
     return moves;
 }
 
 function getBishopMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
+
+    moves = [...oneDirectionBishop(board, coord, 1, 1), ...oneDirectionBishop(board, coord, 1, -1), ...oneDirectionBishop(board, coord, -1, 1), ...oneDirectionBishop(board, coord, -1, -1)]
+
     return moves;
 }
 
