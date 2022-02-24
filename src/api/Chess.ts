@@ -142,7 +142,22 @@ function getQueenMoves(board: Board, coord: Coordinate): Coordinate[] {
 
 function getKingMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
-    return moves;
+    
+    for(let row = -1; row <= 1; row++) {
+        for(let col = -1; col <= 1; col++) {
+            if(row === 0 && col === 0) continue;
+
+            moves.push({
+                row: coord.row + row,
+                col: coord.col + col
+            });
+        }
+    }
+
+    return moves.filter(move => 
+        !coordOOB(move) && // the move is inbounds
+        board[move.row][move.col]?.isBlack !== board[coord.row][coord.col]?.isBlack // the cell does not have a piece of the same colour
+    );
 }
 
 export function convertRawToBoard(raw: number[][]): Board {
