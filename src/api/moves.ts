@@ -124,7 +124,9 @@ function getKnightMoves(board: Board, coord: Coordinate): Coordinate[] {
 function getRookMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
 
-    moves = [...oneDirection(board, coord, 1, 0), ...oneDirection(board, coord, -1, 0), ...oneDirection(board, coord, 0, 1), ...oneDirection(board, coord, 0, -1)];
+    for(const [row, col] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        moves.push(...oneDirection(board, coord, row, col));
+    }
     
     return moves;
 }
