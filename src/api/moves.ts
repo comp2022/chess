@@ -103,7 +103,18 @@ function getBishopMoves(board: Board, coord: Coordinate): Coordinate[] {
 
 function getKnightMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
-    
+     
+    for(const [row, col] of [[1, 2], [2, 1]]) {
+        for(const rowMult of [1, -1]) {
+            for(const colMult of [1, -1]) {
+                moves.push({
+                    row: coord.row + row * rowMult,
+                    col: coord.col + col * colMult
+                });
+            }
+        }
+    }
+
     const knightMove = [1, 2]; // used to generate all other moves
     for(let i = 0; i < 8; i++) {
         moves.push({
