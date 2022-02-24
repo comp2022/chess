@@ -92,8 +92,8 @@ function oneDirection(board: Board, coord: Coordinate, x:number, y: number): Coo
 function getBishopMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
 
-    for(let r = -1; r <= 1; r+=2) {
-        for(let c = -1; c <= 1; c+=2) {
+    for(const r of [-1, 1]) {
+        for(const c of [-1, 1]) {
             moves.push(...oneDirection(board, coord, r, c));
         }
     }
