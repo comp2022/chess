@@ -132,9 +132,7 @@ function getRookMoves(board: Board, coord: Coordinate): Coordinate[] {
 }
 
 function getQueenMoves(board: Board, coord: Coordinate): Coordinate[] {
-    let moves: Coordinate[] = [];
-    moves = [...getRookMoves(board, coord), ...getBishopMoves(board, coord)];
-    return moves;
+    return [...getRookMoves(board, coord), ...getBishopMoves(board, coord)];
 }
 
 function getKingMoves(board: Board, coord: Coordinate): Coordinate[] {
