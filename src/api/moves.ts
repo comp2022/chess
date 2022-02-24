@@ -1,4 +1,4 @@
-import { Board, Coordinate, PieceType } from '.';
+import { Board, Coordinate, PieceType } from './';
 
 type MoveGenerator = (board: Board, coord: Coordinate) => Coordinate[];
 
@@ -92,7 +92,11 @@ function oneDirection(board: Board, coord: Coordinate, x:number, y: number): Coo
 function getBishopMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
 
-    moves = [...oneDirection(board, coord, 1, 1), ...oneDirection(board, coord, 1, -1), ...oneDirection(board, coord, -1, 1), ...oneDirection(board, coord, -1, -1)];
+    for(let r = -1; r <= 1; r+=2) {
+        for(let c = -1; c <= 1; c+=2) {
+            moves.push(...oneDirection(board, coord, r, c));
+        }
+    }
 
     return moves;
 }
