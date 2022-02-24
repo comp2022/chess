@@ -15,7 +15,7 @@ export const Cell: React.FC<CellProps> = ({ isBlack, piece, onClick, highlighted
     let cn = classNames(
         [ styles.cell ], 
         { [ styles.cellOdd ]: isBlack }, // determines shade of cell
-        { [styles.highlighted]: highlighted }
+        { [styles.highlighted]: highlighted },
     );
 
     const type: Piece | null = piece;
