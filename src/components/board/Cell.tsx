@@ -1,5 +1,5 @@
 import React from "react";
-import { Piece } from "../../api/Chess";
+import { Piece } from "../../api";
 import styles from './Board.module.scss';
 import { chesspieces } from "../../assets/chesspieces";
 const classNames = require('classnames'); // https://github.com/JedWatson/classnames
