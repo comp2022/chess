@@ -5,17 +5,17 @@ import { chesspieces } from "../../assets/chesspieces";
 const classNames = require('classnames'); // https://github.com/JedWatson/classnames
 
 export interface CellProps {
-    isBlack: boolean;
+    isBackgroundBlack: boolean;
     highlighted: boolean;
     piece: Piece | null;
     onClick: () => void;
 }
 
-export const Cell: React.FC<CellProps> = ({ isBlack, piece, onClick, highlighted }) => {
+export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, highlighted }) => {
     let cn = classNames(
         [ styles.cell ], 
-        { [ styles.cellOdd ]: isBlack }, // determines shade of cell
-        { [styles.highlighted]: highlighted }
+        { [ styles.cellOdd ]: isBackgroundBlack }, // determines shade of cell
+        { [styles.highlighted]: highlighted },
     );
 
     const type: Piece | null = piece;

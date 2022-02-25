@@ -42,3 +42,7 @@ $cell-size: 80px;
 .highlighted {
     background: c.$background-highlighted-colour;
 }
+
+.highlightedCell {
+    background: c.$background-selected-cell-color;
+}
