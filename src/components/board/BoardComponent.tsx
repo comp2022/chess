@@ -25,20 +25,20 @@ export interface BoardProps {
 // FC stands for Functional Component. This function returns a Functional Components with the props of BoardProps
 export const BoardComponent: React.FC<BoardProps> = ({ board }) => {    
     const [ currentBoard, setCurrentBoard ] = useState<Board>(board);
-    const [ activePiece, setActivePiece ] = useState<Coordinate>();
+    const [ activeCell, setActiveCell ] = useState<Coordinate>();
     const [ isBlackTurn, setIsBlackTurn ] = useState<Boolean>(false);
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
 
     const updateBoard = (currentMove: Coordinate): void => {
         // if the selected move is valid
-        if (activePiece && possibleMoves.some(({row: pRow, col: pCol}) => pRow === currentMove.row && pCol === currentMove.col)) {
+        if (activeCell && possibleMoves.some(({row: pRow, col: pCol}) => pRow === currentMove.row && pCol === currentMove.col)) {
 
             setCurrentBoard(currBoard => {
                 // get a deep copy of currentBoard because we cannot modify state directly
                 const newBoard = [...currBoard.map(r => [...r])];
                 // set activePiece to current square
-                newBoard[currentMove.row][currentMove.col] = currBoard[activePiece.row][activePiece.col];
-                newBoard[activePiece.row][activePiece.col] = null;
+                newBoard[currentMove.row][currentMove.col] = currBoard[activeCell.row][activeCell.col];
+                newBoard[activeCell.row][activeCell.col] = null;
             
                 return newBoard;
             });
@@ -49,9 +49,20 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
         } 
     }
 
-    const blackTurn = (move: Coordinate): boolean => {
-        // return true if black turn
-        return (currentBoard[move.row][move.col]?.isBlack === true);
+    const onClickCell = (coord: Coordinate) => {
+        const { row, col } = coord;
+        const pieceIsBlack = currentBoard[row][col]?.isBlack;
+
+        setActiveCell(coord);
+
+        // if the piece and turn are the same colour, set possible moves to all valid moves
+        if (isBlackTurn === pieceIsBlack){
+            setPossibleMoves(getValidMoves(currentBoard, coord));
+        } else { // otherwise clear possible moves
+            setPossibleMoves([]);
+        }
+
+        updateBoard(coord);
     }
 
     useEffect(() => console.log(possibleMoves), [possibleMoves]);
@@ -64,19 +75,14 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
                 <span className={styles.cellTag}>{rowIndex}</span>
                 { row.map((piece, colIndex) => {
                     const highlighted = possibleMoves.some(({row: pRow, col: pCol}) => pRow === rowIndex && pCol === colIndex);
-                
+                    const cellCoordinate: Coordinate = { row: rowIndex, col: colIndex };
+
                     return <Cell
                         isBackgroundBlack={(rowIndex + colIndex) % 2 === 1}
                         highlighted={highlighted}
                         key={`${rowIndex} ${colIndex}`}
                         piece={piece} 
-                        onClick={() => {
-                            if (isBlackTurn === blackTurn({ row: rowIndex, col: colIndex })){
-                                setActivePiece({ row: rowIndex, col: colIndex });
-                                setPossibleMoves(getValidMoves(currentBoard, { row: rowIndex, col: colIndex }));
-                            }
-                            updateBoard({ row: rowIndex, col: colIndex });
-                        }}
+                        onClick={() => onClickCell(cellCoordinate)}
                     />;
                 })}
             </div>
