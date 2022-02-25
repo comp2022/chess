@@ -1,3 +1,5 @@
+@use './styles/colours' as c;
+
 #app {
     width: 100vw;
     height: 100vh;
@@ -5,5 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    background: c.$page-background-color;
 
 }
