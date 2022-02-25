@@ -9,7 +9,6 @@ export interface Piece {
 
 export type Board = (Piece | null)[][];
 
-export interface Coordinate {
-  row: number;
-  col: number;
-};
+export type Coordinate = [ row: number, col: number ];
+ 
+  
