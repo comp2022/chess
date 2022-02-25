@@ -1,7 +1,9 @@
 export type PieceType = 'pawn' | 'bishop' | 'knight' | 'rook' | 'queen' | 'king'; 
 
+export type PieceColor = 'white' | 'black';
+
 export interface Piece {
-  isBlack: boolean; // false = white, true = black
+  color: PieceColor;
   type: PieceType;
 };
 

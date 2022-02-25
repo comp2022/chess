@@ -10,7 +10,8 @@ function convertNumToPiece(num: number): (Piece | null) {
     if(num === 0) return null;
 
     const piece: Piece = {
-        isBlack: (num & 0x8) === 8,
+        // (num & 0x8)=8 (truthy) then its black, if (num & 0x8)=0 (falsy) then its white
+        color: (num & 0x8) ? 'black' : 'white', 
         type: numToPieceType[(num & 0x7)-1]
     }
 

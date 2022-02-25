@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Board, Coordinate, getValidMoves } from "../../api";
+import { Board, Coordinate, getValidMoves, PieceColor } from "../../api";
 import styles from './Board.module.scss';
 import { Cell } from "./Cell";
 
@@ -26,7 +26,7 @@ export interface BoardProps {
 export const BoardComponent: React.FC<BoardProps> = ({ board }) => {    
     const [ currentBoard, setCurrentBoard ] = useState<Board>(board);
     const [ activeCell, setActiveCell ] = useState<Coordinate>();
-    const [ isBlackTurn, setIsBlackTurn ] = useState<Boolean>(false);
+    const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
 
     const updateBoard = (currentMove: Coordinate): void => {
@@ -45,18 +45,20 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
 
             setPossibleMoves([]);
             // switch turns
-            setIsBlackTurn((isBlackTurn) =>  !isBlackTurn);
+            setColorTurn((color) => {
+                return (color === 'white') ? 'black' : 'white';
+            });
         } 
     }
 
     const onClickCell = (coord: Coordinate) => {
         const { row, col } = coord;
-        const pieceIsBlack = currentBoard[row][col]?.isBlack;
+        const currentPieceColor = currentBoard[row][col]?.color;
 
         setActiveCell(coord);
 
         // if the piece and turn are the same colour, set possible moves to all valid moves
-        if (isBlackTurn === pieceIsBlack){
+        if (colorTurn === currentPieceColor){
             setPossibleMoves(getValidMoves(currentBoard, coord));
         } else { // otherwise clear possible moves
             setPossibleMoves([]);

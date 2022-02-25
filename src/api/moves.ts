@@ -24,14 +24,14 @@ export function coordOOB(coord: Coordinate): boolean {
 
 function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
     const currentPiece = board[coord.row][coord.col];
-    let currentColor = currentPiece?.isBlack; // true = black, false = white
+    let currentColor = currentPiece?.color; 
     let moves: Coordinate[] = [];
     let row: number = 0;
     let colLeft = coord.col - 1;
     let colRight = coord.col + 1;
 
     // check moves for Black piece
-    if (!currentPiece?.isBlack) {
+    if (currentPiece?.color === 'white') {
         // first pawn move 
         if (coord.row === 1) {
             if (board[coord.row + 1][coord.col] === null && board[coord.row + 2][coord.col] === null) moves.push({row: coord.row + 2, col: coord.col}) 
@@ -39,7 +39,7 @@ function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
         row = coord.row + 1;
     }
     // black
-    if (currentPiece?.isBlack) {
+    if (currentPiece?.color === 'black') {
         // first pawn move 
         if (coord.row === 6) {
             if (board[coord.row - 1][coord.col] === null && board[coord.row - 2][coord.col] === null) moves.push({row: coord.row - 2, col: coord.col}) 
@@ -52,10 +52,10 @@ function getPawnMoves(board: Board, coord: Coordinate): Coordinate[] {
         if (board[row][coord.col] === null) moves.push({row: row, col: coord.col});
 
         // move to take out enemy pawn
-        if (colLeft >= 0 && board[row][colLeft] !== null &&  currentColor !== board[row][colLeft]?.isBlack) moves.push({row: row, col: colLeft})
+        if (colLeft >= 0 && board[row][colLeft] !== null &&  currentColor !== board[row][colLeft]?.color) moves.push({row: row, col: colLeft})
 
         // move to take out enemy pawn
-        if (colRight <= 7 && board[row][colRight] !== null && currentColor !== board[row][colRight]?.isBlack) moves.push({row: row, col: colRight})
+        if (colRight <= 7 && board[row][colRight] !== null && currentColor !== board[row][colRight]?.color) moves.push({row: row, col: colRight})
     }
     return moves;
 }
@@ -75,7 +75,7 @@ function oneDirection(board: Board, coord: Coordinate, x:number, y: number): Coo
             moves.push(currentCoord);
         }
         // if cell does not have the same color, push the move once and return the moves
-        else if (board[currentCoord.row][currentCoord.col]?.isBlack !== board[coord.row][coord.col]?.isBlack) {
+        else if (board[currentCoord.row][currentCoord.col]?.color !== board[coord.row][coord.col]?.color) {
             moves.push(currentCoord);
             return moves;
         }
@@ -117,7 +117,7 @@ function getKnightMoves(board: Board, coord: Coordinate): Coordinate[] {
 
     return moves.filter(move => 
         !coordOOB(move) && // the move is inbounds
-        board[move.row][move.col]?.isBlack !== board[coord.row][coord.col]?.isBlack // the cell does not have a piece of the same colour
+        board[move.row][move.col]?.color !== board[coord.row][coord.col]?.color // the cell does not have a piece of the same colour
     );
 }
 
@@ -151,6 +151,6 @@ function getKingMoves(board: Board, coord: Coordinate): Coordinate[] {
 
     return moves.filter(move => 
         !coordOOB(move) && // the move is inbounds
-        board[move.row][move.col]?.isBlack !== board[coord.row][coord.col]?.isBlack // the cell does not have a piece of the same colour
+        board[move.row][move.col]?.color !== board[coord.row][coord.col]?.color // the cell does not have a piece of the same colour
     );
 }
