@@ -32,17 +32,26 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
     const updateBoard = (currentMove: Coordinate): void => {
         // if the selected move is valid
         if (activePiece && possibleMoves.some(({row: pRow, col: pCol}) => pRow === currentMove.row && pCol === currentMove.col)) {
-            currentBoard[currentMove.row][currentMove.col] = currentBoard[activePiece.row][activePiece.col];
-            currentBoard[activePiece.row][activePiece.col] = null;
-            setCurrentBoard(currentBoard);
+
+            setCurrentBoard(currBoard => {
+                // get a deep copy of currentBoard because we cannot modify state directly
+                const newBoard = [...currBoard.map(r => [...r])];
+                // set activePiece to current square
+                newBoard[currentMove.row][currentMove.col] = currBoard[activePiece.row][activePiece.col];
+                newBoard[activePiece.row][activePiece.col] = null;
+            
+                return newBoard;
+            });
+
             setPossibleMoves([]);
-            setIsBlackTurn(!isBlackTurn);
+            // switch turns
+            setIsBlackTurn((isBlackTurn) =>  !isBlackTurn);
         } 
     }
 
     const blackTurn = (move: Coordinate): boolean => {
         // return true if black turn
-        return (currentBoard[move.row][move.col] !== null && currentBoard[move.row][move.col]?.isBlack === true);
+        return (currentBoard[move.row][move.col]?.isBlack === true);
     }
 
     useEffect(() => console.log(possibleMoves), [possibleMoves]);
@@ -57,7 +66,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
                     const highlighted = possibleMoves.some(({row: pRow, col: pCol}) => pRow === rowIndex && pCol === colIndex);
                 
                     return <Cell
-                        isBlack={(rowIndex + colIndex) % 2 === 1}
+                        isBackgroundBlack={(rowIndex + colIndex) % 2 === 1}
                         highlighted={highlighted}
                         key={`${rowIndex} ${colIndex}`}
                         piece={piece} 
