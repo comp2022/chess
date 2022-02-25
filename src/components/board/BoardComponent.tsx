@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Board, Coordinate, getValidMoves } from "../../api/Chess";
+import { Board, Coordinate, getValidMoves } from "../../api";
 import styles from './Board.module.scss';
 import { Cell } from "./Cell";
 
