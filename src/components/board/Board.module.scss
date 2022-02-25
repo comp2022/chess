@@ -1,6 +1,7 @@
 @use '../../styles/colours' as c;
 
-$cell-size: 80px;
+// minimum size between viewport height and viewport width to prevent clipping
+$cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
 
 .board {
     display: flex;
