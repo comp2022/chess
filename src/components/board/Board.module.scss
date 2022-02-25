@@ -6,7 +6,7 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
 .board {
     display: flex;
     flex-direction: column;
-    // border: 1px solid black;
+    outline: 2px solid black;
 }
 
 .row {
