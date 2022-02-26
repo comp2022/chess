@@ -96,7 +96,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
                     const moveHint = possibleMoves.some(([ pRow, pCol ]) => pRow === relativeRowIndex && pCol === relativeColIndex);
 
                     return <Cell
-                        isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 1}
+                        isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 0}
                         moveHint={moveHint}
                         isHighlighted={isHighlighted}
                         key={`${relativeRowIndex} ${relativeColIndex}`}
