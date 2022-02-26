@@ -1,6 +1,6 @@
 import { Board, Coordinate, PieceType } from './';
 
-type MoveGenerator = (board: Board, [cellRow, cellCol]: Coordinate) => Coordinate[];
+type MoveGenerator = (board: Board, coord: Coordinate) => Coordinate[];
 
 const moveGenerators: Record<PieceType, MoveGenerator> = {
     'pawn': getPawnMoves,
@@ -88,12 +88,12 @@ function oneDirection(board: Board, [cellRow, cellCol]: Coordinate, xDirection:n
     return moves;
 }
 
-function getBishopMoves(board: Board, [cellRow, cellCol]: Coordinate): Coordinate[] {
+function getBishopMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
 
     for(const r of [-1, 1]) {
         for(const c of [-1, 1]) {
-            moves.push(...oneDirection(board, [cellRow, cellCol], r, c));
+            moves.push(...oneDirection(board, coord, r, c));
         }
     }
 
@@ -117,11 +117,11 @@ function getKnightMoves(board: Board, [cellRow, cellCol]: Coordinate): Coordinat
     );
 }
 
-function getRookMoves(board: Board, [cellRow, cellCol]: Coordinate): Coordinate[] {
+function getRookMoves(board: Board, coord: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
 
     for(const [row, col] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-        moves.push(...oneDirection(board, [cellRow, cellCol], row, col));
+        moves.push(...oneDirection(board, coord, row, col));
     }
     
     return moves;
