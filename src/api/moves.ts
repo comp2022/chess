@@ -136,11 +136,11 @@ function getQueenMoves(board: Board, coord: Coordinate): Coordinate[] {
 function getKingMoves(board: Board, [row, col]: Coordinate): Coordinate[] {
     let moves: Coordinate[] = [];
     
-    for(let row = -1; row <= 1; row++) {
-        for(let col = -1; col <= 1; col++) {
-            if(row === 0 && col === 0) continue;
+    for(let rowDiff = -1; rowDiff <= 1; rowDiff++) {
+        for(let colDiff = -1; colDiff <= 1; colDiff++) {
+            if(rowDiff === 0 && colDiff === 0) continue;
 
-            moves.push([row + row, col + col]);
+            moves.push([row + rowDiff, col + colDiff]);
         }
     }
 
