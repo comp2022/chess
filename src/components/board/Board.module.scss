@@ -52,3 +52,11 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     border-radius: 100%;
     
 }
+
+.highlighted {
+    position: absolute;
+    width: 100%;
+    aspect-ratio: 1;
+
+    background: c.$background-highlighted-colour;
+}

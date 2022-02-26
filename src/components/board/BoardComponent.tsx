@@ -78,24 +78,27 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
     return <div className={styles.board}>
    
         { currentBoard && currentBoard.map((_, absoluteRowIndex) => {
-            
+
             // reverse the rows if viewing from white side
             const relativeRowIndex = playerView === 'white' ? 8 - absoluteRowIndex - 1 : absoluteRowIndex;
             
             return <div className={styles.row} key={relativeRowIndex}>
-                
                 { currentBoard[relativeRowIndex].map((_, absoluteColIndex) => {
                     // reverse the columns if viewing from black side            
                     const relativeColIndex = playerView === 'black' ? 8 - absoluteColIndex - 1 : absoluteColIndex;
 
                     // the piece to be displayed in this cell (relative)
                     const piece = currentBoard[relativeRowIndex][relativeColIndex];
+                    const cellHasPieceOfCurrentTurn = piece?.color === colorTurn;
+                    const cellIsActive = activeCell?.[0] === relativeRowIndex && activeCell?.[1] === relativeColIndex;
 
+                    const isHighlighted = cellHasPieceOfCurrentTurn && cellIsActive;
                     const moveHint = possibleMoves.some(([ pRow, pCol ]) => pRow === relativeRowIndex && pCol === relativeColIndex);
 
                     return <Cell
                         isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 1}
                         moveHint={moveHint}
+                        isHighlighted={isHighlighted}
                         key={`${relativeRowIndex} ${relativeColIndex}`}
                         piece={piece} 
                         onClick={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
