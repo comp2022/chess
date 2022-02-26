@@ -27,9 +27,13 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, h
     
     return (
         <div className={cn} onClick={() => onClick()}>
-            {
-                piece && <img src={ pieceImg } className={styles.img} alt={piece.type} />
-            }
+        { piece && <img 
+            src={ pieceImg } 
+            alt={ piece.type }
+            
+            className={styles.img} 
+            draggable={false}
+        />}
         </div>
     )
         
