@@ -22,6 +22,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
     const [ activeCell, setActiveCell ] = useState<Coordinate>();
     const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
+    const [ playerView, setPlayerView ] = useState('white');
 
     const [ playMove ] = useSound(moveSound);
     const [ playCapture ] = useSound(captureSound);
@@ -76,21 +77,31 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
 
     return <div className={styles.board}>
    
-        { currentBoard && currentBoard.map((row, rowIndex) => 
-            <div className={styles.row} key={rowIndex}>
+        { currentBoard && currentBoard.map((_, absoluteRowIndex) => {
+            
+            // reverse the rows if viewing from white side
+            const relativeRowIndex = playerView === 'white' ? 8 - absoluteRowIndex - 1 : absoluteRowIndex;
+            
+            return <div className={styles.row} key={relativeRowIndex}>
                 
-                { row.map((piece, colIndex) => {
-                    const moveHint = possibleMoves.some(([pRow, pCol]) => pRow === rowIndex && pCol === colIndex);
-                    
+                { currentBoard[relativeRowIndex].map((_, absoluteColIndex) => {
+                    // reverse the columns if viewing from black side            
+                    const relativeColIndex = playerView === 'black' ? 8 - absoluteColIndex - 1 : absoluteColIndex;
+
+                    // the piece to be displayed in this cell (relative)
+                    const piece = currentBoard[relativeRowIndex][relativeColIndex];
+
+                    const moveHint = possibleMoves.some(([ pRow, pCol ]) => pRow === relativeRowIndex && pCol === relativeColIndex);
+
                     return <Cell
-                        isBackgroundBlack={(rowIndex + colIndex) % 2 === 1}
+                        isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 1}
                         moveHint={moveHint}
-                        key={`${rowIndex} ${colIndex}`}
+                        key={`${relativeRowIndex} ${relativeColIndex}`}
                         piece={piece} 
-                        onClick={() => onClickCell([ rowIndex, colIndex ])}
+                        onClick={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
                     />;
                 })}
             </div>
-        )}
+        })}
     </div>;
 }
