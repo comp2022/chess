@@ -60,3 +60,27 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
 
     background: c.$background-highlighted-colour;
 }
+
+.coordHint {
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 20px;
+    text-align: center;
+    color: c.$cell-odd-colour;
+}
+
+.coordHintOdd {
+    color: c.$cell-even-colour;
+}
+
+.rankHint {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fileHint {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
