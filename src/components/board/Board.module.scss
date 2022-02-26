@@ -13,6 +13,7 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     display: flex;
     flex-direction: row;
 }
+
 .cell {
     display: block;
     position: relative;
