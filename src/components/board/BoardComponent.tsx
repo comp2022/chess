@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Board, Coordinate, getValidMoves, PieceColor } from "../../api";
+import useSound from "use-sound";
 import styles from './Board.module.scss';
 import { Cell } from "./Cell";
+
+// sound fx
+import moveSound from '../../assets/sounds/move.mp3';
+import captureSound from '../../assets/sounds/capture.mp3';
 
 // prop types for our component!
 export interface BoardProps { 
@@ -18,15 +23,24 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
     const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
 
+    const [ playMove ] = useSound(moveSound);
+    const [ playCapture ] = useSound(captureSound);
+
     const updateBoard = (coord: Coordinate): void => {
         const [ currRow, currCol ] = coord;
+        
         // if the selected move is valid
         if (activeCell && possibleMoves.some(( [pRow, pCol] ) => pRow === currRow && pCol === currCol)) {
 
+            // play sounds
+            if(currentBoard[currRow][currCol] !== null) playCapture();
+            else playMove();
+            
             setCurrentBoard(currBoard => {
                 // get a deep copy of currentBoard because we cannot modify state directly
                 const newBoard = [...currBoard.map(r => [...r])];
                 const [activeRow, activeCol] = activeCell;
+
                 // set activePiece to current square
                 newBoard[currRow][currCol] = currBoard[activeRow][activeCol];
                 newBoard[activeRow][activeCol] = null;
