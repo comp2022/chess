@@ -34,12 +34,21 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
 .img {
     position: absolute;
     width: 100%;
-    height: 100%;
+    aspect-ratio: 1;
 
     user-select: none;
     cursor: pointer;
 }
 
-.highlighted {
-    background: c.$background-highlighted-colour;
+.moveHint {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    aspect-ratio: 1;
+
+    background: c.$background-move-hint-colour;
+    border-radius: 100%;
+    
 }

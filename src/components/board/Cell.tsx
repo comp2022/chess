@@ -6,17 +6,15 @@ const classNames = require('classnames'); // https://github.com/JedWatson/classn
 
 export interface CellProps {
     isBackgroundBlack: boolean;
-    highlighted: boolean;
+    moveHint: boolean;
     piece: Piece | null;
     onClick: () => void;
 }
 
-
-export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, highlighted }) => {
+export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, moveHint }) => {
     let cn = classNames(
         [ styles.cell ], 
         { [ styles.cellOdd ]: isBackgroundBlack }, // determines shade of cell
-        { [styles.highlighted]: highlighted },
     );
 
     let pieceImg;
@@ -34,6 +32,9 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, h
             className={styles.img} 
             draggable={false}
         />}
+
+        {/* hint circle */}
+        { moveHint && <div className={styles.moveHint} />}
         </div>
     )
         

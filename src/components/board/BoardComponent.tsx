@@ -28,7 +28,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
 
     const updateBoard = (coord: Coordinate): void => {
         const [ currRow, currCol ] = coord;
-        
+
         // if the selected move is valid
         if (activeCell && possibleMoves.some(( [pRow, pCol] ) => pRow === currRow && pCol === currCol)) {
 
@@ -80,10 +80,11 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
             <div className={styles.row} key={rowIndex}>
                 
                 { row.map((piece, colIndex) => {
-                    const highlighted = possibleMoves.some(([pRow, pCol]) => pRow === rowIndex && pCol === colIndex);
+                    const moveHint = possibleMoves.some(([pRow, pCol]) => pRow === rowIndex && pCol === colIndex);
+                    
                     return <Cell
                         isBackgroundBlack={(rowIndex + colIndex) % 2 === 1}
-                        highlighted={highlighted}
+                        moveHint={moveHint}
                         key={`${rowIndex} ${colIndex}`}
                         piece={piece} 
                         onClick={() => onClickCell([ rowIndex, colIndex ])}
