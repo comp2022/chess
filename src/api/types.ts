@@ -1,13 +1,14 @@
 export type PieceType = 'pawn' | 'bishop' | 'knight' | 'rook' | 'queen' | 'king'; 
 
+export type PieceColor = 'white' | 'black';
+
 export interface Piece {
-  isBlack: boolean; // false = white, true = black
+  color: PieceColor;
   type: PieceType;
 };
 
 export type Board = (Piece | null)[][];
 
-export interface Coordinate {
-  row: number;
-  col: number;
-};
+export type Coordinate = [ row: number, col: number ];
+ 
+  

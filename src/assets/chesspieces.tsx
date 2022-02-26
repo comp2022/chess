@@ -18,7 +18,7 @@ import king_b from './images/king_b.png'
 
 import { PieceType } from '../api'
 
-export const chesspieces: Record<PieceType, any[]> = {
+export const chesspieces: Record<PieceType, string[]> = {
     'pawn': [pawn_w, pawn_b],
     'bishop': [bishop_w, bishop_b],
     'knight': [kinght_w, knight_b],

@@ -11,6 +11,7 @@ export interface CellProps {
     onClick: () => void;
 }
 
+
 export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, highlighted }) => {
     let cn = classNames(
         [ styles.cell ], 
@@ -18,12 +19,16 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, h
         { [styles.highlighted]: highlighted },
     );
 
-    const type: Piece | null = piece;
+    let pieceImg;
+    if (piece) {
+        const index = (piece.color === 'white') ? 0 : 1;
+        pieceImg = chesspieces[piece.type][index];
+    }
     
     return (
         <div className={cn} onClick={() => onClick()}>
             {
-                type && <img src={chesspieces[type.type][+type.isBlack]} className={styles.img} alt={type.type} />
+                piece && <img src={ pieceImg } className={styles.img} alt={piece.type} />
             }
         </div>
     )
