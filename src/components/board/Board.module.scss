@@ -66,11 +66,11 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     font-weight: bold;
     width: 20px;
     text-align: center;
-    color: c.$cell-even-colour;
+    color: c.$cell-odd-colour;
 }
 
 .coordHintOdd {
-    color: c.$cell-odd-colour;
+    color: c.$cell-even-colour;
 }
 
 .rankHint {

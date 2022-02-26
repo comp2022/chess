@@ -29,13 +29,13 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
     const rankHintClass = classNames( 
         [styles.coordHint], 
         [styles.rankHint],
-        { [ styles.coordHintOdd ]: !isBackgroundBlack },
+        { [ styles.coordHintOdd ]: isBackgroundBlack },
     );
     
     const fileHintClass = classNames( 
         [styles.coordHint], 
         [styles.fileHint],
-        { [ styles.coordHintOdd ]: !isBackgroundBlack },
+        { [ styles.coordHintOdd ]: isBackgroundBlack },
     );
     
     return (
