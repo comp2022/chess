@@ -1,17 +1,19 @@
 @use '../../styles/colours' as c;
 
-$cell-size: 80px;
+// minimum size between viewport height and viewport width to prevent clipping
+$cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
 
 .board {
     display: flex;
     flex-direction: column;
-    // border: 1px solid black;
+    outline: 2px solid black;
 }
 
 .row {
     display: flex;
     flex-direction: row;
 }
+
 .cell {
     display: block;
     position: relative;
@@ -31,18 +33,30 @@ $cell-size: 80px;
 
 .img {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    width: 70%;
-    height: 70%;
+    width: 100%;
+    aspect-ratio: 1;
+
     user-select: none;
+    cursor: pointer;
+}
+
+.moveHint {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%;
+    aspect-ratio: 1;
+
+    background: c.$background-move-hint-colour;
+    border-radius: 100%;
+    
 }
 
 .highlighted {
-    background: c.$background-highlighted-colour;
-}
+    position: absolute;
+    width: 100%;
+    aspect-ratio: 1;
 
-.highlightedCell {
-    background: c.$background-selected-cell-color;
+    background: c.$background-highlighted-colour;
 }
