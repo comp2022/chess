@@ -22,7 +22,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
     const [ activeCell, setActiveCell ] = useState<Coordinate>();
     const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
-    const [ playerView, setPlayerView ] = useState('white');
+    const [ playerView, setPlayerView ] = useState<PieceColor>('white');
 
     const [ playMove ] = useSound(moveSound);
     const [ playCapture ] = useSound(captureSound);
