@@ -29,7 +29,8 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
     const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
 
-    const updateBoard = ([ currRow, currCol ]: Coordinate): void => {
+    const updateBoard = (coord: Coordinate): void => {
+        const [ currRow, currCol ] = coord;
         // if the selected move is valid
         if (activeCell && possibleMoves.some(( [pRow, pCol] ) => pRow === currRow && pCol === currCol)) {
 
@@ -52,11 +53,11 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
         } 
     }
 
-    const onClickCell = ([row, col]: Coordinate) => {
-
+    const onClickCell = (coord: Coordinate) => {
+        const [ row, col ] = coord;
         const currentPieceColor = currentBoard[row][col]?.color;
 
-        setActiveCell([row, col]);
+        setActiveCell(coord);
 
         // if the piece and turn are the same colour, set possible moves to all valid moves
         if (colorTurn === currentPieceColor){
@@ -65,7 +66,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
             setPossibleMoves([]);
         }
 
-        updateBoard([row, col]);
+        updateBoard(coord);
     }
 
     useEffect(() => console.log(possibleMoves), [possibleMoves]);
@@ -78,7 +79,6 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
                 <span className={styles.cellTag}>{rowIndex}</span>
                 { row.map((piece, colIndex) => {
                     const highlighted = possibleMoves.some(([pRow, pCol]) => pRow === rowIndex && pCol === colIndex);
-
                     return <Cell
                         isBackgroundBlack={(rowIndex + colIndex) % 2 === 1}
                         highlighted={highlighted}
