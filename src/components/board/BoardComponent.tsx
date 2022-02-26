@@ -13,6 +13,9 @@ export interface BoardProps {
     board: Board
 }
 
+const fileLabels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+const rankLabels = ['1', '2', '3', '4', '5', '6', '7', '8'];
+
 /*
  * The chess board. Has no control over the game itself, just current board state.
  */
@@ -95,10 +98,15 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
                     const isHighlighted = cellHasPieceOfCurrentTurn && cellIsActive;
                     const moveHint = possibleMoves.some(([ pRow, pCol ]) => pRow === relativeRowIndex && pCol === relativeColIndex);
 
+                    const fileHint = absoluteRowIndex === 7 ? fileLabels[relativeColIndex] : '';
+                    const rankHint = absoluteColIndex === 0 ? rankLabels[relativeRowIndex] : '';
+
                     return <Cell
                         isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 0}
                         moveHint={moveHint}
                         isHighlighted={isHighlighted}
+                        fileHint={fileHint}
+                        rankHint={rankHint}
                         key={`${relativeRowIndex} ${relativeColIndex}`}
                         piece={piece} 
                         onClick={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
