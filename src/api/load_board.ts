@@ -37,7 +37,7 @@ function convertFENToBoard(fen: FEN): Board {
         let col = 0;
         // standard algebraic notation, not actually SAN but best-fitting
         for(let san of rankState.split("")) {
-            if(col > 8) throw new Error(`Invalid FEN: Too many cells described for rank ${rankIndex}.`);
+            if(col >= 8) throw new Error(`Invalid FEN: Too many cells described for rank ${rankIndex}.`);
 
             // check if its describing an amount of empty places
             const val = Number.parseInt(san);
