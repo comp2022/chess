@@ -67,3 +67,56 @@ export function convertFENToBoard(fen: FEN): Board {
 
     return board;
 }
+
+const pieceTypeToSan: Record<PieceType, string> = {
+    'pawn': 'p',
+    'knight': 'n',
+    'bishop': 'b',
+    'rook': 'r',
+    'queen': 'q',
+    'king': 'k'
+};
+
+function pieceToSan(piece: (Piece | null)): (string | null) {
+    if(piece === null) return null;
+
+    let san = pieceTypeToSan[piece.type];
+    if(piece.color === 'white') san = san.toUpperCase();
+
+    return san;
+}
+
+export function convertBoardToFEN(board: Board): FEN {
+    const rankToFEN = (rank: (Piece | null)[]) => {
+        let fen: (string | null)[] = [];
+
+        let emptyCount = 0; // counts number of empty spaces in a row
+        for(let col = 0; col < 8; col++) {
+            const piece = rank[col];
+            const sanPiece = pieceToSan(piece);
+
+            if(sanPiece === null) {
+                emptyCount++;
+                continue;
+            }
+            
+            if(emptyCount !== 0) {
+                fen.push(`${emptyCount}`);
+                emptyCount = 0;
+            }
+            
+            fen.push(sanPiece);
+        }
+
+        if(emptyCount !== 0) {
+            fen.push(`${emptyCount}`);
+            emptyCount = 0;
+        }
+
+        return fen.join('');
+    }
+
+    const fen: FEN = board.map((rank, rankIndex) => rankToFEN(rank)).reverse().join('/');
+
+    return `${fen} w KQkq - 0 1`;
+}
