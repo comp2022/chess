@@ -8,7 +8,7 @@ function App() {
   const initialBoard: Board = convertRawToBoard(state);
 
   return <div id="app">
-    <BoardComponent board={initialBoard}/>
+    <BoardComponent board={initialBoard} displayFEN={true}/>
   </div>;
 }
 
