@@ -28,7 +28,7 @@ const sanToPieceType: Record<string, PieceType> = {
 };
 
 // https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation#Definition
-function convertFENToBoard(fen: FEN): Board {
+export function convertFENToBoard(fen: FEN): Board {
     const [boardState, turn, castleState, epSquare, halfmoveClock, fullMoveNumber] = fen.split(" ");
 
     const board = boardState.split("/").map((rankState, rankIndex) => {
@@ -41,7 +41,7 @@ function convertFENToBoard(fen: FEN): Board {
 
             // check if its describing an amount of empty places
             const val = Number.parseInt(san);
-            if(isNaN(val)) {
+            if(!isNaN(val)) {
                 col += val; // advance by the specified number of cells
                 continue;
             }
@@ -56,10 +56,14 @@ function convertFENToBoard(fen: FEN): Board {
             const type = sanToPieceType[san];
 
             rank[col] = { color, type };
+            col++;
         }
 
         return rank;
     });
+
+    // the first rank described in FEN is actually the black side, so we need to reverse it to make sure white is first
+    board.reverse();
 
     return board;
 }
