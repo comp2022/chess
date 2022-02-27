@@ -10,5 +10,5 @@ export interface Piece {
 export type Board = (Piece | null)[][];
 
 export type Coordinate = [ row: number, col: number ];
- 
-  
+
+export type FEN = string;

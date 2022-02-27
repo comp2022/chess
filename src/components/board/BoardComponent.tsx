@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Board, Coordinate, getValidMoves, PieceColor } from "../../api";
+import React, { useEffect, useMemo, useState } from "react";
+import { Board, convertBoardToFEN, Coordinate, FEN, getValidMoves, PieceColor } from "../../api";
 import useSound from "use-sound";
 import styles from './Board.module.scss';
 import { Cell } from "./Cell";
@@ -10,7 +10,8 @@ import captureSound from '../../assets/sounds/capture.mp3';
 
 // prop types for our component!
 export interface BoardProps { 
-    board: Board
+    board: Board;
+    displayFEN?: boolean;
 }
 
 const fileLabels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -20,12 +21,13 @@ const rankLabels = ['1', '2', '3', '4', '5', '6', '7', '8'];
  * The chess board. Has no control over the game itself, just current board state.
  */
 // FC stands for Functional Component. This function returns a Functional Components with the props of BoardProps
-export const BoardComponent: React.FC<BoardProps> = ({ board }) => {    
+export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {    
     const [ currentBoard, setCurrentBoard ] = useState<Board>(board);
     const [ activeCell, setActiveCell ] = useState<Coordinate>();
     const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
     const [ playerView, setPlayerView ] = useState<PieceColor>('white');
+    const fenString = useMemo<FEN>(() => convertBoardToFEN(currentBoard), [ currentBoard ]);
 
     const [ playMove ] = useSound(moveSound);
     const [ playCapture ] = useSound(captureSound);
@@ -78,7 +80,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
 
     useEffect(() => console.log(possibleMoves), [possibleMoves]);
 
-    return <div className={styles.board}>
+    return <><div className={styles.board}>
    
         { currentBoard && currentBoard.map((_, absoluteRowIndex) => {
 
@@ -114,5 +116,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board }) => {
                 })}
             </div>
         })}
-    </div>;
+    </div>
+    {displayFEN && <h2 className={styles.fen}>{fenString}</h2>}
+    </>;
 }
