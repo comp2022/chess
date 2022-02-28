@@ -23,6 +23,16 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     user-select: none;
 }
 
+// highlight border on valid / invalid cell
+.cellValid {
+    transition: 0.05s cubic-bezier(0,.36,.54,.34);
+    box-shadow:0px 0px 0px 4px c.$background-highlight-valid-cell-color inset;
+}
+.cellInvalid {
+    transition: 0.05s cubic-bezier(0,.36,.54,.34);
+    box-shadow:0px 0px 0px 4px c.$background-highlight-invalid-cell-color inset;
+}
+
 .cellOdd { 
     background-color: c.$cell-odd-colour; 
 }
@@ -53,12 +63,26 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     
 }
 
-.highlighted {
+// this is for highlighting the square fully
+@mixin highlightCell {
     position: absolute;
     width: 100%;
     aspect-ratio: 1;
+}
 
+.highlighted {
+    @include highlightCell();
     background: c.$background-highlighted-colour;
+}
+
+.highlightedInvalidCell {
+    @include highlightCell();
+    background: c.$background-highlight-invalid-cell-color;
+}
+
+.highlightedValidCell {
+    @include highlightCell();
+    background: c.$background-highlight-valid-cell-color;
 }
 
 .coordHint {

@@ -14,25 +14,23 @@ export interface CellProps {
     piece: Piece | null;
     coord: Coordinate;
     childSetDropCoord: any; // dunno how to fix the Coordinate type error atm
+    possibleMoves: Coordinate[];
     onClick: () => void;
     onMouseDown: () => void;
 }
 
-export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, moveHint, isHighlighted, rankHint, fileHint, coord, onMouseDown, childSetDropCoord }) => {
-    let cn = classNames(
-        [ styles.cell ], 
-        { [ styles.cellOdd ]: isBackgroundBlack }, // determines shade of cell
-    );
-    const [dropCoord, setDropCoord] = useState<Coordinate>();
+export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, moveHint, isHighlighted, rankHint, fileHint, coord, onMouseDown, childSetDropCoord, possibleMoves }) => {
 
+    const [dropCoord, setDropCoord] = useState<Coordinate>();
+  
     // set drag
-    const [{ isOver }, drop] = useDrop({
+    const [{ isOver, canDrop }, drop] = useDrop({
         accept: 'piece',
-        drop: () => {
-          setDropCoord(coord);
-        },
+        canDrop: () => (possibleMoves.some(( [pRow, pCol] ) => pRow === coord[0] && pCol === coord[1])),
+        drop: () => setDropCoord(coord),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
+            canDrop: !!monitor.canDrop()
         })
     });
 
@@ -52,6 +50,12 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
         const index = (piece.color === 'white') ? 0 : 1;
         pieceImg = chesspieces[piece.type][index];
     }
+    let cn = classNames(
+        [ styles.cell ], 
+        { [ styles.cellOdd ]: isBackgroundBlack }, // determines shade of cell
+        { [ styles.cellValid]: canDrop && isOver }, // borderValid
+        { [ styles.cellInvalid]: !canDrop && isOver }, // borderInvalid
+    );
     
     const rankHintClass = classNames( 
         [styles.coordHint], 
@@ -76,8 +80,9 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
         {/* highlighted, goes under the piece image */}
         { isHighlighted && <div className={styles.highlighted} />}
 
-        {/* Highlight cell when we drag chess piece on it (could highlight valid/invalid cells in the future */}
-        {isOver && <div className={styles.highlighted} />}
+        {/* Highlight cell when we drag chess piece on it */}
+        {/* {isOver && !canDrop && <div className={styles.highlightedInvalidCell } />}
+        {isOver && canDrop && <div className={styles.highlightedValidCell } />} */}
 
         {/* rank / file hints */}
         {rankHint && <span className={rankHintClass}>{rankHint}</span>}

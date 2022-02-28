@@ -30,7 +30,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
     const [ playerView, setPlayerView ] = useState<PieceColor>('white');
     const fenString = useMemo<FEN>(() => convertBoardToFEN(currentBoard), [ currentBoard ]);
 
-    const [dropCoord, setDropCoord] = useState<Coordinate>();
+    const [dropCoord, setDropCoord] = useState<Coordinate | undefined>();
     const [ playMove ] = useSound(moveSound);
     const [ playCapture ] = useSound(captureSound);
 
@@ -81,7 +81,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
 
 
     useEffect(() => {}, [possibleMoves]);
-    
+
     // we get this data from, Cell
     useEffect(() => {
         if (dropCoord) {
@@ -124,6 +124,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
                         piece={piece} 
                         coord={[ relativeRowIndex, relativeColIndex ]}
                         onClick={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
+                        possibleMoves={possibleMoves}
                         onMouseDown={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
                         childSetDropCoord={setDropCoord}
                     />;
