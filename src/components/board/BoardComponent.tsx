@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Board, convertBoardToFEN, Coordinate, FEN, getValidMoves, PieceColor } from "../../api";
 import useSound from "use-sound";
 import styles from './Board.module.scss';
-import { useDrop } from 'react-dnd';
 import { Cell } from "./Cell";
 
 // sound fx

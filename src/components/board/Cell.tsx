@@ -89,8 +89,6 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
         {fileHint && <span className={fileHintClass}>{fileHint}</span>}
 
         {/* piece image */}
-        {/* i wonder if there is the way to increase the size of this preview */}
-        { piece && pieceImg && <DragPreviewImage connect={preview} src={pieceImg}  /> }
         { piece && <img src={pieceImg} ref={drag} alt={ piece.type } className={styles.img} style={{ opacity: isDragging ? 0 : 1 }} />}
 
         {/* hint circle, goes over the piece image */}
