@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Board, convertBoardToFEN, Coordinate, FEN, getValidMoves, PieceColor } from "../../api";
 import useSound from "use-sound";
 import styles from './Board.module.scss';
+import { useDrop } from 'react-dnd';
 import { Cell } from "./Cell";
 
 // sound fx
@@ -29,6 +30,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
     const [ playerView, setPlayerView ] = useState<PieceColor>('white');
     const fenString = useMemo<FEN>(() => convertBoardToFEN(currentBoard), [ currentBoard ]);
 
+    const [dropCoord, setDropCoord] = useState<Coordinate>();
     const [ playMove ] = useSound(moveSound);
     const [ playCapture ] = useSound(captureSound);
 
@@ -65,9 +67,8 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
     const onClickCell = (coord: Coordinate) => {
         const [ row, col ] = coord;
         const currentPieceColor = currentBoard[row][col]?.color;
-
         setActiveCell(coord);
-
+        
         // if the piece and turn are the same colour, set possible moves to all valid moves
         if (colorTurn === currentPieceColor){
             setPossibleMoves(getValidMoves(currentBoard, [ row, col ]));
@@ -78,7 +79,16 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
         updateBoard(coord);
     }
 
-    useEffect(() => console.log(possibleMoves), [possibleMoves]);
+
+    useEffect(() => {}, [possibleMoves]);
+    
+    // we get this data from, Cell
+    useEffect(() => {
+        if (dropCoord) {
+            console.log(dropCoord)
+            updateBoard(dropCoord);
+        }
+    }, [dropCoord]);
 
     return <><div className={styles.board}>
    
@@ -87,7 +97,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
             // reverse the rows if viewing from white side
             const relativeRowIndex = playerView === 'white' ? 8 - absoluteRowIndex - 1 : absoluteRowIndex;
             
-            return <div className={styles.row} key={relativeRowIndex}>
+            return <div className={styles.row} key={relativeRowIndex}  >
                 { currentBoard[relativeRowIndex].map((_, absoluteColIndex) => {
                     // reverse the columns if viewing from black side            
                     const relativeColIndex = playerView === 'black' ? 8 - absoluteColIndex - 1 : absoluteColIndex;
@@ -102,8 +112,9 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
 
                     const fileHint = absoluteRowIndex === 7 ? fileLabels[relativeColIndex] : '';
                     const rankHint = absoluteColIndex === 0 ? rankLabels[relativeRowIndex] : '';
-
+                    // <div ref={drop}></div>
                     return <Cell
+                        
                         isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 0}
                         moveHint={moveHint}
                         isHighlighted={isHighlighted}
@@ -111,7 +122,10 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
                         rankHint={rankHint}
                         key={`${relativeRowIndex} ${relativeColIndex}`}
                         piece={piece} 
+                        coord={[ relativeRowIndex, relativeColIndex ]}
                         onClick={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
+                        onMouseDown={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
+                        childSetDropCoord={setDropCoord}
                     />;
                 })}
             </div>
