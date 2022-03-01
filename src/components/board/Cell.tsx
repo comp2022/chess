@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Coordinate, Piece } from "../../api";
 import styles from './Board.module.scss';
 import { chesspieces } from "../../assets/chesspieces";
-import { useDrag, useDrop, DragPreviewImage } from 'react-dnd'; //https://react-dnd.github.io/react-dnd/docs/overview
+import { useDrag, useDrop } from 'react-dnd'; //https://react-dnd.github.io/react-dnd/docs/overview
 const classNames = require('classnames'); // https://github.com/JedWatson/classnames
 
 export interface CellProps {
@@ -13,7 +13,7 @@ export interface CellProps {
     fileHint: string;
     piece: Piece | null;
     coord: Coordinate;
-    childSetDropCoord: any; // dunno how to fix the Coordinate type error atm
+    childSetDropCoord: (value: Coordinate | undefined) => void;
     possibleMoves: Coordinate[];
     onClick: () => void;
     onMouseDown: () => void;
@@ -21,13 +21,12 @@ export interface CellProps {
 
 export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, moveHint, isHighlighted, rankHint, fileHint, coord, onMouseDown, childSetDropCoord, possibleMoves }) => {
 
-    const [dropCoord, setDropCoord] = useState<Coordinate>();
-  
     // set drag
     const [{ isOver, canDrop }, drop] = useDrop({
         accept: 'piece',
+        // check for valid / invalid moves
         canDrop: () => (possibleMoves.some(( [pRow, pCol] ) => pRow === coord[0] && pCol === coord[1])),
-        drop: () => setDropCoord(coord),
+        drop: () => childSetDropCoord(coord), // invoked when the piece is dropped
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
             canDrop: !!monitor.canDrop()
@@ -35,11 +34,10 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
     });
 
     // set drop
-    const [{ isDragging }, drag, preview] = useDrag(() => ({
+    const [{ isDragging }, drag] = useDrag(() => ({
 		// "type" is required. It is used by the "accept" specification of drop targets.
         type: 'piece',
-		// The collect function utilizes a "monitor" instance (see the Overview for what this is)
-		// to pull important pieces of state from the DnD system.
+
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         })
@@ -50,6 +48,7 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
         const index = (piece.color === 'white') ? 0 : 1;
         pieceImg = chesspieces[piece.type][index];
     }
+
     let cn = classNames(
         [ styles.cell ], 
         { [ styles.cellOdd ]: isBackgroundBlack }, // determines shade of cell
@@ -69,10 +68,6 @@ export const Cell: React.FC<CellProps> = ({ isBackgroundBlack, piece, onClick, m
         { [ styles.coordHintOdd ]: isBackgroundBlack },
     );
 
-    // invoke this method when isDrop changes
-    useEffect(() => {
-        childSetDropCoord(dropCoord);
-    }, [dropCoord, setDropCoord]);
     
     return (
         // use onMouseDown to setActiveCell when dragging

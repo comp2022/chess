@@ -27,9 +27,9 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
     const [ colorTurn, setColorTurn ] = useState<PieceColor>('white');
     const [ possibleMoves, setPossibleMoves ] = useState<Coordinate[]>([]);
     const [ playerView, setPlayerView ] = useState<PieceColor>('white');
+    const [dropCoord, setDropCoord] = useState<Coordinate | undefined>();
     const fenString = useMemo<FEN>(() => convertBoardToFEN(currentBoard), [ currentBoard ]);
 
-    const [dropCoord, setDropCoord] = useState<Coordinate | undefined>();
     const [ playMove ] = useSound(moveSound);
     const [ playCapture ] = useSound(captureSound);
 
@@ -46,6 +46,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
             setCurrentBoard(currBoard => {
                 // get a deep copy of currentBoard because we cannot modify state directly
                 const newBoard = [...currBoard.map(r => [...r])];
+
                 const [activeRow, activeCol] = activeCell;
 
                 // set activePiece to current square
@@ -77,7 +78,6 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
 
         updateBoard(coord);
     }
-
 
     useEffect(() => {}, [possibleMoves]);
 
@@ -111,9 +111,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
 
                     const fileHint = absoluteRowIndex === 7 ? fileLabels[relativeColIndex] : '';
                     const rankHint = absoluteColIndex === 0 ? rankLabels[relativeRowIndex] : '';
-                    // <div ref={drop}></div>
                     return <Cell
-                        
                         isBackgroundBlack={(relativeRowIndex + relativeColIndex) % 2 === 0}
                         moveHint={moveHint}
                         isHighlighted={isHighlighted}
@@ -125,6 +123,7 @@ export const BoardComponent: React.FC<BoardProps> = ({ board, displayFEN }) => {
                         onClick={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
                         possibleMoves={possibleMoves}
                         onMouseDown={() => onClickCell([ relativeRowIndex, relativeColIndex ])}
+                        // pass in setState hook to child, the value set in child will be passed back to parent
                         childSetDropCoord={setDropCoord}
                     />;
                 })}
