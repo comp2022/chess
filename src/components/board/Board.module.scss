@@ -21,6 +21,7 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     height: $cell-size;
     background-color: c.$cell-even-colour;
     user-select: none;
+
 }
 
 // highlight border on valid / invalid cell
@@ -64,26 +65,11 @@ $cell-size: calc((min(100vh, 100vw) / 8) * 0.8);
     
 }
 
-// this is for highlighting the square fully
-@mixin highlightCell {
+.highlighted {
     position: absolute;
     width: 100%;
     aspect-ratio: 1;
-}
-
-.highlighted {
-    @include highlightCell();
     background: c.$background-highlighted-colour;
-}
-
-.highlightedInvalidCell {
-    @include highlightCell();
-    background: c.$background-highlight-invalid-cell-color;
-}
-
-.highlightedValidCell {
-    @include highlightCell();
-    background: c.$background-highlight-valid-cell-color;
 }
 
 .coordHint {
